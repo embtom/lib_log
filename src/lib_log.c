@@ -1,19 +1,26 @@
-/* ****************************************************************************************************
- * log.c within the following project: log
- *
- *  compiler:   GNU Tools ARM LINUX
- *  target:     armv6
- *  author:	    Tom
- * ****************************************************************************************************/
-
-/* ****************************************************************************************************/
-
 /*
- *	******************************* change log *******************************
- *  date			user			comment
- * 	06 April 2015			Tom			- creation of log.c
- *  21 April 2015			Tom			- add of comments anf logging messages
+ * This file is part of the EMBTOM project
+ * Copyright (c) 2018-2019 Thomas Willetal 
+ * (https://github.com/tom3333)
  *
+ * Permission is hereby granted, free of charge, to any person obtaining
+ * a copy of this software and associated documentation files (the
+ * "Software"), to deal in the Software without restriction, including
+ * without limitation the rights to use, copy, modify, merge, publish,
+ * distribute, sublicense, and/or sell copies of the Software, and to
+ * permit persons to whom the Software is furnished to do so, subject to
+ * the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+ * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 /* *******************************************************************
@@ -26,7 +33,7 @@
 #ifdef NO_TTY_PORTMUX
 #include <stdio.h>
 #elif TRACE
-#include <lib_tty_portmux.h>
+#include <lib_ttyportmux.h>
 #else
 #error "No output is defined"
 #endif
@@ -49,9 +56,9 @@
 #define M_PRINT_FORMATED_OUTPUT_END(_level)					do { fflush(stdout); } while (0)
 
 #else
-#define M_WRITE_FORMATED_OUTPUT(_level, _format, ...) 	    do { lib_tty_portmux__print(lib_log__translate_log_level(_level), _format, __VA_ARGS__); } while (0)
-#define M_WRITE_FORMATED_OUTPUT_VA(_level, _format, _vargs) do { lib_tty_portmux__vprint(lib_log__translate_log_level(_level), _format, _vargs); } while (0)
-#define M_PRINT_FORMATED_OUTPUT_END(_level)					do { lib_tty_portmux__print(lib_log__translate_log_level(_level), "\n"); } while (0)
+#define M_WRITE_FORMATED_OUTPUT(_level, _format, ...) 	    do { lib_ttyportmux__print(lib_log__translate_log_level(_level), _format, __VA_ARGS__); } while (0)
+#define M_WRITE_FORMATED_OUTPUT_VA(_level, _format, _vargs) do { lib_ttyportmux__vprint(lib_log__translate_log_level(_level), _format, _vargs); } while (0)
+#define M_PRINT_FORMATED_OUTPUT_END(_level)					do { lib_ttyportmux__print(lib_log__translate_log_level(_level), "\n"); } while (0)
 
 #endif
 
@@ -65,7 +72,7 @@ static enum log_level s_log_level = LOG_LEVEL_warning;
  * static function declarations
  * ******************************************************************/
 static char* lib_log__str_log_level(enum log_level _level);
-enum tty_stream lib_log__translate_log_level(enum log_level _level);
+enum ttyStreamType lib_log__translate_log_level(enum log_level _level);
 
 /* *******************************************************************
  * \brief	Set active logging level
@@ -159,17 +166,17 @@ static char* lib_log__str_log_level(enum log_level _level)
 	}
 }
 
-enum tty_stream lib_log__translate_log_level(enum log_level _level)
+enum ttyStreamType lib_log__translate_log_level(enum log_level _level)
 {
 	switch (_level)
 	{
-		case LOG_LEVEL_critical			: return TTY_STREAM_critical;
-		case LOG_LEVEL_error			: return TTY_STREAM_error;
-		case LOG_LEVEL_warning			: return TTY_STREAM_warning;
-		case LOG_LEVEL_info				: return TTY_STREAM_info;
-		case LOG_LEVEL_debug 			: return TTY_STREAM_debug;
-		case LOG_LEVEL_stream_control	: return TTY_STREAM_CONTROL;
-		default							: return TTY_STREAM_CONTROL;
+		case LOG_LEVEL_critical			: return TTYSTREAM_critical;
+		case LOG_LEVEL_error			: return TTYSTREAM_error;
+		case LOG_LEVEL_warning			: return TTYSTREAM_warning;
+		case LOG_LEVEL_info				: return TTYSTREAM_info;
+		case LOG_LEVEL_debug 			: return TTYSTREAM_debug;
+		case LOG_LEVEL_stream_control	: return TTYSTREAM_control;
+		default							: return TTYSTREAM_control;
 	}
 }
 
